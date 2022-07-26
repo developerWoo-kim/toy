@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <div>
+        <div>
+            <form th:object="${programSearch}" class="form-inline">
+                <div class="form-group mb-2">
+                    <input type="text" th:field="*{programTitle}" class="form-control" placeholder="프로그램명"/>
+                </div>
+                <div class="form-group mx-sm-1 mb-2">
+                    <select th:field="*{programType}" class="form-control">
+                        <option value="">프로그램 유형</option>
+                        <option th:each="programType : ${T(gw.toy.reqandreserv.domain.ProgramType).values()}"
+                                th:value="${programType}"
+                                th:text="${programType}">option
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+            </form>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>프로그램명</th>
+                <th>프로그램 유형</th>
+                <th>모집 정원</th>
+                <th>접수시작일자</th>
+                <th>접수종료일자</th>
+                <th>시작일정</th>
+                <th>종료일정</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="program : ${programList}">
+                <td th:text="${program.id}"></td>
+                <td th:text="${program.programTitle}"></td>
+                <td th:text="${program.programType}"></td>
+                <td th:text="${program.capacity}"></td>
+                <td th:text="${program.receiptStartDt}"></td>
+                <td th:text="${program.receiptEndDt}"></td>
+                <td th:text="${program.startDt}"></td>
+                <td th:text="${program.endDt}"></td>
+                <td>
+                    <a href="#" class="btn btn-danger" th:href="'javascript:request('+${program.id}+')'">신청</a>
+                </td>
+<!--                <td>-->
+<!--                    <a th:if="${item.status.name() == 'ORDER'}" href="#" th:href="'javascript:cancel('+${item.id}+')'"-->
+<!--                       class="btn btn-danger">CANCEL</a>-->
+<!--                </td>-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+
+</div> <!-- /container -->
+
+</body>
+<script>
+    function request(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "/request/" + id + "/new");
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</html>
