@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+<script>
+    $(function(){
+        $("#receiptStartDt, #receiptEndDt, #startDt, #endDt").datepicker({
+            dateFormat: 'yy-mm-dd',
+            closeText: '닫기',
+            prevText: '이전 달',
+            nextText: '다음 달',
+            currentText: '오늘',
+            yearRange: 'c-100:c+10',
+            monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+            monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+            dayNames: ['일','월','화','수','목','금','토'],
+            dayNamesShort: ['일','월','화','수','목','금','토'],
+            dayNamesMin: ['일','월','화','수','목','금','토'],
+            weekHeader: 'Wk',
+            firstDay: 0,
+            isRTL: false,
+            buttonImageOnly: true, // 이미지표시
+            showMonthAfterYear: true,
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            language: 'ko'
+        });
+    });
+</script>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <form role="form" action="/program/save" method="post">
+
+        <div class="form-group">
+            <label for="member">관리자</label>
+            <select name="memberId" id="member" class="form-control">
+                <option value="">관리자 선택</option>
+                <option th:each="member : ${members}"
+                        th:value="${member.id}"
+                        th:text="${member.name}" />
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="programTitle">프로그램명</label>
+            <input type="text" name="programTitle" class="form-control" id="programTitle" placeholder="프로그램명을 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+            <label for="programType">프로그램 유형</label>
+            <select name="programType" id="programType" class="form-control">
+                <option value="">유형 선택</option>
+                <option th:value="EDU" th:text="교육"/>
+                <option th:value="STUD" th:text="연수"/>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="capacity">모집 정원</label>
+            <input type="number" name="capacity" class="form-control" id="capacity" placeholder="모집 정원을 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+            <label for="drwtType">추첨 방식</label>
+            <select name="drwtType" id="drwtType" class="form-control">
+                <option value="">추첨 방식을 선택해주세요.</option>
+                <option th:value="SELECT" th:text="승인"/>
+                <option th:value="RANDOM" th:text="무작위"/>
+                <option th:value="FIRST" th:text="선착순"/>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="receiptStartDt">접수 일자</label>
+            <input type="text" name="receiptStartDt" class="form-control" id="receiptStartDt" placeholder="시작 일자를 선택해주세요.">
+            <input type="text" name="receiptEndDt" class="form-control" id="receiptEndDt" placeholder="종료 일자를 선택해주세요.">
+        </div>
+
+        <div class="form-group">
+            <label for="receiptStartDt">프로그램 일정</label>
+            <input type="text" name="startDt" class="form-control" id="startDt" placeholder="시작 일자를 선택해주세요.">
+            <input type="text" name="endDt" class="form-control" id="endDt" placeholder="종료 일자를 선택해주세요.">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+
+</div> <!-- /container -->
+
+</body>
+</html>

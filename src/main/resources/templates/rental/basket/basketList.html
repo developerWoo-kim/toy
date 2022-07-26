@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+<!--    <div>-->
+<!--        <div>-->
+<!--            <form th:object="${rentalItemSearch}" class="form-inline">-->
+<!--                <div class="form-group mb-2">-->
+<!--                    <input type="text" th:field="*{programTitle}" class="form-control" placeholder="프로그램명"/>-->
+<!--                </div>-->
+<!--                <div class="form-group mx-sm-1 mb-2">-->
+<!--                    <select th:field="*{programType}" class="form-control">-->
+<!--                        <option value="">프로그램 유형</option>-->
+<!--                        <option th:each="programType : ${T(gw.toy.reqandreserv.domain.ProgramType).values()}"-->
+<!--                                th:value="${programType}"-->
+<!--                                th:text="${programType}">option-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-primary mb-2">검색</button>-->
+<!--            </form>-->
+<!--        </div>-->
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>물품명</th>
+                <th>타입</th>
+                <th>목적</th>
+                <th>수량</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${rentalItemList}">
+                <td th:text="${item.rentalItemId}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.classification}"></td>
+                <td th:text="${item.purpose}"></td>
+                <td th:text="${item.rentalQuantity + ' / ' + item.totalQuantity}"></td>
+                <td>
+                    <a href="#" class="btn btn-danger" th:href="'javascript:add('+${item.rentalItemId}+')'">담기</a>
+                </td>
+<!--                <td>-->
+<!--                    <a th:if="${item.status.name() == 'ORDER'}" href="#" th:href="'javascript:cancel('+${item.id}+')'"-->
+<!--                       class="btn btn-danger">CANCEL</a>-->
+<!--                </td>-->
+            </tr>
+            </tbody>
+        </table>
+        <a href="#" th:href="'javascript:goBasket(1)'" class="btn btn-danger">CANCEL</a>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+
+</div> <!-- /container -->
+
+</body>
+<script type="text/javascript">
+
+    function add(id) {
+        // const xhr = new XMLHttpRequest();
+        // xhr.open('POST', "/add/" + id + "/basket", true);
+        // xhr.onload = function () {
+        //     // do something to response
+        //     console.log(this.responseText);
+        // };
+        // xhr.send();
+
+        $.ajax({
+            url : "/add/" + id + "/basket",
+            type : "POST",
+            contentType : "application/json",
+            success : function(data) {
+                const jsonDate = JSON.parse(data);
+                alert(jsonDate.message);
+            },
+            error : function(request,status,error) {
+                alert("시스템장애가 발생하였습니다.");
+            },
+        })
+    }
+
+    function goBasket(id) {
+        const form = document.createElement("form");
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "/list/" + id + "/basket");
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</html>

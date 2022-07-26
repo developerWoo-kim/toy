@@ -25,36 +25,5 @@ import java.time.LocalDateTime;
 @Transactional
 public class ProgramTest {
 
-    @Autowired
-    ProgramRepository pr;
-    @Autowired
-    ProgramService ps;
-    @Autowired
-    MemberService ms;
-
-    @Test
-    @DisplayName("프로그램 등록 테스트")
-    void save() {
-        Member member = new Member();
-        member.setId(1L);
-        Member findMember = ms.findOne(member);
-
-        ProgramManage pm = new ProgramManage();
-
-        pm.setProgramTitle("장애인 돌돔 교육 1차");
-        pm.setProgramType(ProgramType.EDU);
-        pm.setCapacity(50);
-        pm.setDrwtType(DrwtType.SELECT);
-        pm.setIndvdlInfo("개인정보 처리방침");
-        pm.setReceiptStartDt(LocalDate.of(2022,7,25));
-        pm.setReceiptEndDt(LocalDate.of(2022,7,28));
-        pm.setStartDt(LocalDate.of(2022,8,1));
-        pm.setEndDt(LocalDate.of(2022,8,12));
-        pm.setRegId(findMember.getId());
-        pm.setRegDt(LocalDateTime.now());
-
-        ProgramManage saveProgram = ps.save(pm, member);
-
-    }
 
 }

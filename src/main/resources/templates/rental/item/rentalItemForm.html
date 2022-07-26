@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+<script>
+    $(function(){
+        $("#receiptStartDt, #receiptEndDt, #startDt, #endDt").datepicker({
+            dateFormat: 'yy-mm-dd',
+            closeText: '닫기',
+            prevText: '이전 달',
+            nextText: '다음 달',
+            currentText: '오늘',
+            yearRange: 'c-100:c+10',
+            monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+            monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+            dayNames: ['일','월','화','수','목','금','토'],
+            dayNamesShort: ['일','월','화','수','목','금','토'],
+            dayNamesMin: ['일','월','화','수','목','금','토'],
+            weekHeader: 'Wk',
+            firstDay: 0,
+            isRTL: false,
+            buttonImageOnly: true, // 이미지표시
+            showMonthAfterYear: true,
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true,
+            language: 'ko'
+        });
+    });
+</script>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <form role="form" action="/rentalItem/save" method="post">
+
+        <div class="form-group">
+            <label for="name">물품명</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="물품명을 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+            <label for="classification">타입</label>
+            <select name="classification" id="classification" class="form-control">
+                <option value="">타입 선택</option>
+                <option th:value="A" th:text="A"/>
+                <option th:value="B" th:text="B"/>
+                <option th:value="C" th:text="C"/>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="purpose">목적</label>
+            <input type="text" name="purpose" class="form-control" id="purpose" placeholder="목적을 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+            <label for="totalQuantity">총 수량</label>
+            <input type="number" name="totalQuantity" class="form-control" id="totalQuantity" placeholder="총 수량을 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+            <label for="explanation">설명</label>
+            <input type="text" name="explanation" class="form-control" id="explanation" placeholder="몰품 설명을 입력해주세요.">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+
+</div> <!-- /container -->
+
+</body>
+</html>
