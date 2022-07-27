@@ -27,6 +27,9 @@ public class RentalBasket {
     private RentalItem rentalItem;
     private long quantity;
 
+    public RentalBasket() {
+    }
+
     public RentalBasket(Member member, RentalItem rentalItem, long quantity) {
         this.member = member;
         this.rentalItem = rentalItem;

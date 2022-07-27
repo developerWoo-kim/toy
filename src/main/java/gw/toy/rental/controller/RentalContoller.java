@@ -1,6 +1,5 @@
 package gw.toy.rental.controller;
 
-import gw.toy.member.domain.Member;
 import gw.toy.member.service.MemberService;
 import gw.toy.rental.domain.RentalBasket;
 import gw.toy.rental.domain.RentalItem;
@@ -8,10 +7,7 @@ import gw.toy.rental.service.RentalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,7 +39,7 @@ public class RentalContoller {
     }
 
     @GetMapping("/list/{memberId}/basket")
-    public String basketList(@PathVariable Long memberId, Model model) {
+    public String basketList(@PathVariable("memberId") Long memberId, Model model) {
         List<RentalBasket> basketList = rentalService.findBasketList(memberId);
 
         model.addAttribute("basketList", basketList);
@@ -57,4 +53,10 @@ public class RentalContoller {
         String result = rentalService.addItemToBasket(rentalItemId);
         return result;
     }
+
+    @PostMapping("/rental/{memberId}/apply")
+    public String applyRentalItem(@PathVariable("memberId") Long memberId) {
+        return "ok";
+    }
+
 }

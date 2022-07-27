@@ -1,12 +1,16 @@
 package gw.toy.rental.repository;
 
+import gw.toy.rental.domain.RentalApplyItem;
+import gw.toy.rental.domain.RentalApplyManage;
 import gw.toy.rental.domain.RentalBasket;
 import gw.toy.rental.domain.RentalItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,21 +44,35 @@ public class RentalRepository {
 
     /**
      * 장바구니 조회
-     * @param id
+     * @param memberId
      * @return
      */
-    public List<RentalBasket> findBasketList(Long id) {
-        return em.createQuery("select b from RentalBasket b where b.memberId = :id").getResultList();
+    public List<RentalBasket> findBasketList(Long memberId) {
+        String jpql = "select b from RentalBasket b where ";
+        jpql += "b.member.id = :memberId";
+
+        TypedQuery<RentalBasket> query = em.createQuery(jpql, RentalBasket.class)
+                .setMaxResults(1000);
+
+        query = query.setParameter("memberId", memberId);
+
+        return query.getResultList();
     }
 
     /**
      * 장바구니에서 아이템 조회
-     * @param id
+     * @param rentalItemId
      * @return
      */
-    public RentalBasket findItemInBasket(Long id) {
-        RentalBasket rentalBasket = em.find(RentalBasket.class, id);
-        return rentalBasket;
+    public Optional<RentalBasket> findItemInBasket(Long rentalItemId) {
+        String jpql = "select b from RentalBasket b where ";
+        jpql += "b.rentalItem.rentalItemId = :rentalItemId";
+
+        List<RentalBasket> rentalBasket = em.createQuery(jpql, RentalBasket.class)
+                .setMaxResults(1000)
+                .setParameter("rentalItemId", rentalItemId)
+                .getResultList();
+        return rentalBasket.stream().findAny();
     }
 
     /**
@@ -63,5 +81,21 @@ public class RentalRepository {
      */
     public void addItemToBasket(RentalBasket rentalBasket) {
         em.persist(rentalBasket);
+    }
+
+    /**
+     * 대여 물품 신청
+     * @param rentalApplyManage
+     */
+    public void createRentalItemApply(RentalApplyManage rentalApplyManage) {
+        em.persist(rentalApplyManage);
+    }
+
+    /**
+     * 대여 물품 신청관리 테이블 조회
+     */
+    public RentalApplyManage findRentalApplyManage(Long rentalApplyId) {
+        RentalApplyManage rentalApplyManage = em.find(RentalApplyManage.class, rentalApplyId);
+        return rentalApplyManage;
     }
 }

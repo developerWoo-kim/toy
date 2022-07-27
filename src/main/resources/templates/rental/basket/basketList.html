@@ -6,7 +6,7 @@
 <div class="container">
 
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-
+    <form role="form" th:object="${rentalBasketDto}" action="/rental/1/apply" method="post">
 <!--    <div>-->
 <!--        <div>-->
 <!--            <form th:object="${rentalItemSearch}" class="form-inline">-->
@@ -31,20 +31,25 @@
             <tr>
                 <th>#</th>
                 <th>물품명</th>
-                <th>타입</th>
+                <th>목적</th>
                 <th>목적</th>
                 <th>수량</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${rentalItemList}">
-                <td th:text="${item.rentalItemId}"></td>
-                <td th:text="${item.name}"></td>
-                <td th:text="${item.classification}"></td>
-                <td th:text="${item.purpose}"></td>
-                <td th:text="${item.rentalQuantity + ' / ' + item.totalQuantity}"></td>
+            <tr th:each="basketList : ${basketList}">
+
+                <td th:text="${basketList.rentalBasketId}">
+                    <input hidden type="number" th:field="*{rentalBasketId}" class="form-control" id="rentalBasketId" th:value="${basketList.rentalBasketId}">
+                </td>
+                <td th:text="${basketList.rentalItem.name}"></td>
+                <td th:text="${basketList.rentalItem.purpose}"></td>
+                <td th:text="${basketList.rentalItem.classification}"></td>
+                <td th:text="${basketList.quantity}">
+                    <input hidden type="number" th:field="*{quantity}" class="form-control" th:id="quantity" th:value="${basketList.quantity}">
+                </td>
                 <td>
-                    <a href="#" class="btn btn-danger" th:href="'javascript:add('+${item.rentalItemId}+')'">담기</a>
+                    <a href="#" class="btn btn-danger" th:href="'javascript:del('+${basketList.rentalBasketId}+')'">빼기</a>
                 </td>
 <!--                <td>-->
 <!--                    <a th:if="${item.status.name() == 'ORDER'}" href="#" th:href="'javascript:cancel('+${item.id}+')'"-->
@@ -53,7 +58,8 @@
             </tr>
             </tbody>
         </table>
-        <a href="#" th:href="'javascript:goBasket(1)'" class="btn btn-danger">CANCEL</a>
+        <button type="submit" class="btn btn-primary">신청하기</button>
+    </form>
     </div>
 
     <div th:replace="fragments/footer :: footer"/>
@@ -62,34 +68,10 @@
 
 </body>
 <script type="text/javascript">
-
-    function add(id) {
-        // const xhr = new XMLHttpRequest();
-        // xhr.open('POST', "/add/" + id + "/basket", true);
-        // xhr.onload = function () {
-        //     // do something to response
-        //     console.log(this.responseText);
-        // };
-        // xhr.send();
-
-        $.ajax({
-            url : "/add/" + id + "/basket",
-            type : "POST",
-            contentType : "application/json",
-            success : function(data) {
-                const jsonDate = JSON.parse(data);
-                alert(jsonDate.message);
-            },
-            error : function(request,status,error) {
-                alert("시스템장애가 발생하였습니다.");
-            },
-        })
-    }
-
-    function goBasket(id) {
+    function apply(id) {
         const form = document.createElement("form");
         form.setAttribute("method", "get");
-        form.setAttribute("action", "/list/" + id + "/basket");
+        form.setAttribute("action", "/apply/" + id + "/item");
         document.body.appendChild(form);
         form.submit();
     }
