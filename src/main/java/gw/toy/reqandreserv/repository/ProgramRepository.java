@@ -20,7 +20,7 @@ public class ProgramRepository {
         return findProgram;
     }
 
-    public List<ProgramManage> findAll(ProgramManage programManage) {
+    public List<ProgramManage> findAll() {
         return em.createQuery("select p from ProgramManage p").getResultList();
     }
 

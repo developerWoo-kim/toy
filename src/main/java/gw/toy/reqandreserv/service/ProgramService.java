@@ -29,8 +29,8 @@ public class ProgramService {
     }
 
     @Transactional
-    public List<ProgramManage> findAll(ProgramManage programManage) {
-        List<ProgramManage> findAllProgram = programRepository.findAll(programManage);
+    public List<ProgramManage> findAll() {
+        List<ProgramManage> findAllProgram = programRepository.findAll();
         return findAllProgram;
     }
 

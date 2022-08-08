@@ -1,7 +1,9 @@
 package gw.toy.reqandreserv.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.tomcat.jni.Local;
 
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProgramManage {
 
     @Id
@@ -41,6 +45,22 @@ public class ProgramManage {
     private LocalDate receiptEndDt; //접수종료일자
     private long regId; // 등록자명
     private LocalDateTime regDt; // 등록일자
+
+    /**
+     * 폼 데이터 담기
+     */
+    public ProgramManage(ProgramForm form) {
+        this.setProgramTitle(form.getProgramTitle());
+        this.setProgramType(form.getProgramType());
+        this.setCapacity(form.getCapacity());
+        this.setDrwtType(form.getDrwtType());
+        this.setReceiptStartDt(LocalDate.parse(form.getReceiptStartDt()));
+        this.setReceiptEndDt(LocalDate.parse(form.getReceiptEndDt()));
+        this.setStartDt(LocalDate.parse(form.getStartDt()));
+        this.setEndDt(LocalDate.parse(form.getEndDt()));
+        this.setRegId(form.getMemberId());
+        this.setRegDt(LocalDateTime.now());
+    }
 
     /**
      * 신청 가능한 날짜인지 체크

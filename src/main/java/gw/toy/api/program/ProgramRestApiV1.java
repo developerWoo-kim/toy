@@ -26,7 +26,7 @@ public class ProgramRestApiV1 {
     @GetMapping("/v1/AllProgram")
     public List<ProgramManage> retrieveAllProgram() {
         ProgramManage pm = new ProgramManage();
-        List<ProgramManage> programs = ps.findAll(pm);
+        List<ProgramManage> programs = ps.findAll();
         return programs;
     }
 

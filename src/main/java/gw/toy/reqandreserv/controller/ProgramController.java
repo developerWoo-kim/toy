@@ -43,17 +43,7 @@ public class ProgramController {
 
     @PostMapping("/program/save")
     public String save(ProgramForm form) {
-        ProgramManage programManage = new ProgramManage();
-        programManage.setProgramTitle(form.getProgramTitle());
-        programManage.setProgramType(form.getProgramType());
-        programManage.setCapacity(form.getCapacity());
-        programManage.setDrwtType(form.getDrwtType());
-        programManage.setReceiptStartDt(LocalDate.parse(form.getReceiptStartDt()));
-        programManage.setReceiptEndDt(LocalDate.parse(form.getReceiptEndDt()));
-        programManage.setStartDt(LocalDate.parse(form.getStartDt()));
-        programManage.setEndDt(LocalDate.parse(form.getEndDt()));
-        programManage.setRegId(form.getMemberId());
-        programManage.setRegDt(LocalDateTime.now());
+        ProgramManage programManage = new ProgramManage(form);
 
         ProgramManage saveProgram = ps.save(programManage);
 

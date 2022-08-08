@@ -2,17 +2,21 @@ package gw.toy.api.program;
 
 import gw.toy.api.exception.ApiException;
 import gw.toy.api.exception.ExceptionEnum;
+import gw.toy.reqandreserv.domain.ProgramForm;
 import gw.toy.reqandreserv.domain.ProgramManage;
 import gw.toy.reqandreserv.service.ProgramService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -32,11 +36,17 @@ public class ProgramRestApiV2 {
      * @return List<ProgramManage>
      */
     @GetMapping("/v2/AllProgram")
-    public List<ProgramManage> retrieveAllProgram() {
-        ProgramManage pm = new ProgramManage();
-        List<ProgramManage> programs = ps.findAll(pm);
+    public List<EntityModel<ProgramManage>> retrieveAllProgram() {
 
-        return programs;
+        List<EntityModel<ProgramManage>> pmList = ps.findAll().stream()
+                .map(pm -> {
+                    return EntityModel.of(pm,
+                            linkTo(methodOn(this.getClass()).retrieveAllProgram()).withSelfRel(),
+                            linkTo(methodOn(this.getClass()).retrieveProgram(pm.getId())).withRel("findOne")
+                            );
+                }).collect(Collectors.toList());
+
+        return pmList;
     }
 
     /**
@@ -64,6 +74,30 @@ public class ProgramRestApiV2 {
         );
 
         return model;
+    }
+
+    /**
+     * REST API
+     * program save api
+     * version : v2
+     * versioning : path
+     *
+     * @return ResponseEntity
+     */
+    @PostMapping("/v2/program")
+    public ResponseEntity<?> saveProgram(@RequestBody ProgramForm form) {
+
+        ProgramManage programManage = new ProgramManage(form);
+        ProgramManage saveProgram = ps.save(programManage);
+
+        EntityModel<ProgramManage> model = EntityModel.of(
+                saveProgram,
+                linkTo(methodOn(this.getClass()).retrieveProgram(saveProgram.getId())).withSelfRel()
+        );
+
+        return ResponseEntity
+                .created(model.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(model);
     }
 }
 
