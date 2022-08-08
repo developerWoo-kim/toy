@@ -1,14 +1,16 @@
 package gw.toy.rental.repository;
 
-import gw.toy.rental.domain.RentalApplyItem;
-import gw.toy.rental.domain.RentalApplyManage;
-import gw.toy.rental.domain.RentalBasket;
-import gw.toy.rental.domain.RentalItem;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import gw.toy.rental.domain.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,6 +84,27 @@ public class RentalRepository {
     public void addItemToBasket(RentalBasket rentalBasket) {
         em.persist(rentalBasket);
     }
+
+    /**
+     * 장바구니 비우기
+     */
+    public void removeBasket(RentalBasket rentalBasket) {
+        em.remove(rentalBasket);
+    }
+
+    /**
+     * 선택한 일자에 대여 가능한 물품이 있는지 확인
+     */
+//    public List<RentalItemDto> findPossibleItemList(LocalDate startDt, LocalDate endDt) {
+//        RentalItem rentalItem = new RentalItem();
+//        em.persist(rentalItem);
+//
+//        JPAQueryFactory query = new JPAQueryFactory(em);
+//
+//
+//
+//        return
+//    }
 
     /**
      * 대여 물품 신청

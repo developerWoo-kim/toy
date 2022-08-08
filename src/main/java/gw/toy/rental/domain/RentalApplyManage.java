@@ -22,11 +22,15 @@ public class RentalApplyManage {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "rentalApplyManage", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rentalApplyManage",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<RentalApplyItem> rentalApplyItems = new ArrayList<>();
 
     private LocalDate applyDate;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private RentalApplyStatus status;
 
     /**
      * 대여아이템을 추가하는 편의 메소드
@@ -41,9 +45,20 @@ public class RentalApplyManage {
      * 대여 신청 객체를 만드는 편의 메소드
      * @param member
      */
-    public void createApply(Member member) {
+    public void createApply(Member member, List<RentalBasket> basket) {
         this.member = member;
         this.applyDate = LocalDate.now();
+        this.status = RentalApplyStatus.WAIT;
+
+        for (RentalBasket rentalBasket : basket) {
+            RentalApplyItem rentalApplyItem = new RentalApplyItem();
+            rentalApplyItem.setRentalItem(rentalBasket.getRentalItem());
+            rentalApplyItem.setQuantity(rentalBasket.getQuantity());
+            rentalApplyItem.setStartDt(LocalDate.of(2022,8,5));
+            rentalApplyItem.setEndDt(LocalDate.of(2022,8,8));
+
+            addApplyItem(rentalApplyItem);
+        }
     }
 
 }

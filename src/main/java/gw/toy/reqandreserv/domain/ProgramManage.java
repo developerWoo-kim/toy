@@ -1,5 +1,6 @@
 package gw.toy.reqandreserv.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.tomcat.jni.Local;
@@ -20,6 +21,7 @@ public class ProgramManage {
     private Long id; // 프로그램 식별자
     private String programTitle; // 프로그램명
 
+    @JsonIgnore
     @OneToMany(mappedBy = "programManage")
     private List<RequestManage> requestManageList = new ArrayList<>();
 

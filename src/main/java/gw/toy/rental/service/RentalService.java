@@ -61,7 +61,7 @@ public class RentalService {
             RentalItem rentalItem = new RentalItem();
             rentalItem.setRentalItemId(id);
 
-            RentalBasket rentalBasket = new RentalBasket(member, rentalItem, 2);
+            RentalBasket rentalBasket = new RentalBasket(member, rentalItem, 5);
             rentalRepository.addItemToBasket(rentalBasket);
 
             json.addProperty("status", "success");
