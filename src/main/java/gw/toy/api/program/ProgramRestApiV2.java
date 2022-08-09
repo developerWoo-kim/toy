@@ -53,6 +53,7 @@ public class ProgramRestApiV2 {
      * REST API
      * program api
      * version : v2
+     *
      * versioning : path
      *
      * @return ProgramManage
@@ -96,8 +97,8 @@ public class ProgramRestApiV2 {
         );
 
         return ResponseEntity
-                .created(model.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(model);
-    }
+            .created(model.getRequiredLink(IanaLinkRelations.SELF).toUri())
+            .body(model);
+}
 }
 
